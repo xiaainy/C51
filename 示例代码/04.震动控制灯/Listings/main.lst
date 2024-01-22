@@ -1,0 +1,66 @@
+C51 COMPILER V9.54   MAIN                                                                  01/21/2024 20:42:36 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Software\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          //震动传感器控制灯
+   2          #include <intrins.h>
+   3          #include "reg52.h"
+   4          
+   5          
+   6          sbit led1 = P3^7;//根据原理图（电路图）设备变量led1指向P3组IO口的第7口
+   7          sbit vibrate = P3^3;//震动传感器的DO接到了3.3口
+   8          
+   9          
+  10          
+  11          void Delay2000ms()    //@11.0592MHz
+  12          {
+  13   1        unsigned char i, j, k;
+  14   1      
+  15   1        _nop_();
+  16   1        i = 15;
+  17   1        j = 2;
+  18   1        k = 235;
+  19   1        do
+  20   1        {
+  21   2          do
+  22   2          {
+  23   3            while (--k);
+  24   3          } while (--j);
+  25   2        } while (--i);
+  26   1      }
+  27          
+  28          void main()
+  29          {
+  30   1        //用查询的方式判断是否发生震动
+  31   1        while(1){
+  32   2           //模块说明，震动的话DO输出低电平
+  33   2          if(vibrate == 0){ 
+  34   3              led1 = 0; //亮灯
+  35   3              Delay2000ms();
+  36   3            led1 = 1;
+  37   3          }else{
+  38   3            led1 = 1;
+  39   3          }
+  40   2          
+  41   2        }
+  42   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     30    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

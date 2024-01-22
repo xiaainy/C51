@@ -1,0 +1,61 @@
+C51 COMPILER V9.54   MAIN                                                                  01/22/2024 23:18:43 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Software\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          //定时器学习练习，定时器控制led每隔1秒亮灭
+   2          #include "reg52.h"
+   3          
+   4          sbit led = P3^6;
+   5          void main()
+   6          {
+   7   1        int cnt = 0;
+   8   1        
+   9   1        led = 1;
+  10   1        //1.配置定时器0工作模式为16位计时
+  11   1        TMOD = 0x01;
+  12   1        //2.给初值，定一个10ms出来
+  13   1        TL0 = 0x00;
+  14   1        TH0 = 0xDC;
+  15   1        //3.开始计时
+  16   1        TR0 = 1;
+  17   1        TF0 = 0; 
+  18   1        while(1){
+  19   2          if(TF0 == 1)//当爆表的时候，硬件会修改bit5（TF0）位上面的数据，改成（置1），如果不用中断，我们代码清零
+  20   2            {
+  21   3              TF0 = 0;//不用中断，必须软件清零
+  22   3              cnt++;//统计爆表次数
+  23   3              //重新给初值
+  24   3              TL0 = 0x00;
+  25   3              TH0 = 0xDC;
+  26   3              if(cnt == 100){//爆表100次，经过了1秒
+  27   4                cnt = 0;//当爆表100次表示1s，重新让cnt从0开始计算下一次的1s
+  28   4                led = !led;//每经过一秒翻转一下led的状态
+  29   4              }
+  30   3          }
+  31   2        
+  32   2        }
+  33   1          //4.爆表了,操作led吗，累计到1s,再操作led
+  34   1      
+  35   1        //爆表了，变量加1，加100次就是1秒，每隔1s就转换led状态
+  36   1        
+  37   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     45    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

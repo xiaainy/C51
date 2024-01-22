@@ -1,0 +1,129 @@
+C51 COMPILER V9.54   MAIN                                                                  01/21/2024 23:33:28 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Software\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          //433M遥控器控制继电器开关
+   2          #include <intrins.h>
+   3          #include "reg52.h"
+   4          
+   5          #define J_ON 1
+   6          #define J_OFF 0
+   7          
+   8          sbit swicher = P1^0;
+   9          sbit D0_ON = P1^1;
+  10          sbit D1_OFF = P1^2;
+  11          sbit vibrate = P1^3;
+  12          
+  13          void Delay2000ms()    //@11.0592MHz
+  14          {
+  15   1        unsigned char i, j, k;
+  16   1      
+  17   1        _nop_();
+  18   1        i = 15;
+  19   1        j = 2;
+  20   1        k = 235;
+  21   1        do
+  22   1        {
+  23   2          do
+  24   2          {
+  25   3            while (--k);
+  26   3          } while (--j);
+  27   2        } while (--i);
+  28   1      }
+  29          
+  30          void Delay500ms()   //@11.0592MHz
+  31          {
+  32   1        unsigned char i, j, k;
+  33   1      
+  34   1        _nop_();
+  35   1        i = 4;
+  36   1        j = 129;
+  37   1        k = 119;
+  38   1        do
+  39   1        {
+  40   2          do
+  41   2          {
+  42   3            while (--k);
+  43   3          } while (--j);
+  44   2        } while (--i);
+  45   1      }
+  46          
+  47          void Delay5000ms()    //@11.0592MHz
+  48          {
+  49   1        unsigned char i, j, k;
+  50   1      
+  51   1        _nop_();
+  52   1        i = 36;
+  53   1        j = 5;
+  54   1        k = 211;
+C51 COMPILER V9.54   MAIN                                                                  01/21/2024 23:33:28 PAGE 2   
+
+  55   1        do
+  56   1        {
+  57   2          do
+  58   2          {
+  59   3            while (--k);
+  60   3          } while (--j);
+  61   2        } while (--i);
+  62   1      }
+  63          
+  64          
+  65          
+  66          void main()
+  67          {
+  68   1        int mark = J_OFF;
+  69   1        while(1){
+  70   2          //1.如果A按键被按下，设定为开启报警模式
+  71   2          if(D0_ON == 1){
+  72   3          //长响，表示进入警报模式
+  73   3            swicher = 0;
+  74   3            Delay2000ms();
+  75   3            swicher = 1;
+  76   3          //设定报警模式标记
+  77   3          mark = J_ON;
+  78   3          }
+  79   2          
+  80   2          //2.如果B按键被按下，设定为关闭警报模式
+  81   2          if(D1_OFF == 1){
+  82   3          //短响，表示进入接触报警模式
+  83   3            swicher = 0;
+  84   3            Delay500ms();
+  85   3            swicher = 1;
+  86   3          //设定报警接触模式标记
+  87   3            mark = J_OFF;
+  88   3          }
+  89   2          
+  90   2          //3.在警报模式下
+  91   2          if(mark == J_ON){
+  92   3          //3.1如果发生了震动，喇叭响
+  93   3            if(vibrate == 0){
+  94   4              //喇叭响，给继电器低电平，导通
+  95   4              swicher = 0;
+  96   4              Delay5000ms();
+  97   4            }else{//3.2如果不发生震动，给一个高电平，喇叭不响
+  98   4              swicher = 1;
+  99   4            }
+ 100   3            
+ 101   3          }
+ 102   2        }
+ 103   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     92    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

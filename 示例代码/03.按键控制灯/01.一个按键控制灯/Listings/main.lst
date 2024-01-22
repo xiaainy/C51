@@ -1,0 +1,46 @@
+C51 COMPILER V9.54   MAIN                                                                  01/21/2024 17:28:40 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Software\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          //上官课程练习：01.控制IO口来点亮一个LED
+   2          #include "reg52.h"
+   3          
+   4          sbit Key1 = P2^1;
+   5          sbit ledOne = P3^7;
+   6          
+   7          void main()
+   8          {
+   9   1        //查询法检测按键是否被按下
+  10   1        while(1){
+  11   2          if(Key1 == 0){//KEY1位置和GND接通,表现为低电平，值为0
+  12   3            ledOne = 0;
+  13   3        //灯亮，给一个P3.7口低电平（口看电路图，LED1的悬空接单片的3.7口，给0是拉低悬空的那边线成低电平）
+  14   3          }
+  15   2        
+  16   2        }
+  17   1        
+  18   1        
+  19   1        
+  20   1        
+  21   1        
+  22   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =      7    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

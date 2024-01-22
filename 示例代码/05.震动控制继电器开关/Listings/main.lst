@@ -1,0 +1,63 @@
+C51 COMPILER V9.54   MAIN                                                                  01/21/2024 21:03:31 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Software\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          //震动传感器控制继电器开关
+   2          #include <intrins.h>
+   3          #include "reg52.h"
+   4          
+   5          sbit vibrate = P3^3;//震动传感器的DO接到了3.3口
+   6          sbit swicher = P1^1;
+   7          void Delay2000ms()    //@11.0592MHz
+   8          {
+   9   1        unsigned char i, j, k;
+  10   1      
+  11   1        _nop_();
+  12   1        i = 15;
+  13   1        j = 2;
+  14   1        k = 235;
+  15   1        do
+  16   1        {
+  17   2          do
+  18   2          {
+  19   3            while (--k);
+  20   3          } while (--j);
+  21   2        } while (--i);
+  22   1      }
+  23          
+  24          void main()
+  25          {
+  26   1        //用查询的方式判断是否发生震动
+  27   1        while(1){
+  28   2           //模块说明，震动的话DO输出低电平
+  29   2          if(vibrate == 0){ 
+  30   3            //当发生震动时候，导通继电器，给继电器一个低电平
+  31   3          swicher = 0;
+  32   3            Delay2000ms();
+  33   3            swicher = 1;//高电平，继电器NO和COM不通
+  34   3          }else{
+  35   3          swicher = 1;
+  36   3          }
+  37   2          
+  38   2        }
+  39   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     30    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,50 @@
+C51 COMPILER V9.54   MAIN                                                                  01/21/2024 22:37:39 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Software\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          //433M遥控器控制继电器开关
+   2          
+   3          #include "reg52.h"
+   4          
+   5          sbit swicher = P1^1;
+   6          sbit D0_ON = P1^2;
+   7          sbit D1_OFF = P1^3;
+   8          
+   9          
+  10          
+  11          void main()
+  12          {
+  13   1        //查询哪个按下
+  14   1        while(1){
+  15   2           //收到遥控信号A，D0表现为低电平
+  16   2          if(D0_ON == 1){ 
+  17   3            //A被按下，导通继电器，给继电器IN口一个低电平
+  18   3          swicher = 0;     
+  19   3          }
+  20   2          if(D1_OFF == 1){  //收到信号B，D1表现为高电平
+  21   3                //B被按下，不导通继电器，给继电器IN口一个高电平
+  22   3            swicher = 1;
+  23   3          }
+  24   2          
+  25   2        }
+  26   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     12    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

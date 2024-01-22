@@ -1,0 +1,73 @@
+C51 COMPILER V9.54   MAIN                                                                  01/21/2024 18:36:57 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Software\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          //上官课程练习：03.通过翻转控制IDE灯亮灭
+   2          #include "reg52.h"
+   3          #include <intrins.h>
+   4          
+   5          sbit Key1 = P2^1;
+   6          sbit Key2 = P2^0;
+   7          sbit ledOne = P3^7;
+   8          
+   9          void Delay50ms()    //@11.0592MHz
+  10          {
+  11   1        unsigned char i, j, k;
+  12   1      
+  13   1        _nop_();
+  14   1        _nop_();
+  15   1        i = 3;
+  16   1        j = 26;
+  17   1        k = 223;
+  18   1        do
+  19   1        {
+  20   2          do
+  21   2          {
+  22   3            while (--k);
+  23   3          } while (--j);
+  24   2        } while (--i);
+  25   1      }
+  26          
+  27          void main()
+  28          {
+  29   1        ledOne = 1;
+  30   1        
+  31   1        //查询法检测按键是否被按下
+  32   1        while(1){
+  33   2          if(Key1 == 0){ //KEY1位置和GND接通,表现为低电平，值为0
+  34   3            //软件消抖，不知道是抖动还是人为按按键，延迟50ms再判断一次
+  35   3            Delay50ms();
+  36   3            if(Key1 == 0){
+  37   4        
+  38   4            ledOne = !ledOne; //翻转控制灯亮    
+  39   4            }
+  40   3          }
+  41   2        if(Key2 == 0){//KEY2位置和GND接通,表现为低电平，值为0
+  42   3            ledOne = 1;
+  43   3        //灯亮，给一个P3.7口低电平（口看电路图，LED1的悬空接单片的3.7口，给0是拉低悬空的那边线成低电平）
+  44   3          }
+  45   2        }
+  46   1        
+  47   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     35    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.54   MAIN                                                                  01/21/2024 18:36:57 PAGE 2   
+
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
