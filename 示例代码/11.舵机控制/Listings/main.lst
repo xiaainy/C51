@@ -1,0 +1,122 @@
+C51 COMPILER V9.54   MAIN                                                                  01/23/2024 20:17:59 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Software\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          //定时器学习练习，
+   2          #include "reg52.h"
+   3          
+   4          sbit sg90_con = P1^1;
+   5          int jd;
+   6          int cnt = 0;
+   7          
+   8          void Time0Init()
+   9          {
+  10   1        //1. 配置定时器0工作模式位16位计时
+  11   1        TMOD = 0x01;
+  12   1        //2. 给初值，定一个0.5ms(500微秒)出来
+  13   1        TL0=0x33;
+  14   1        TH0=0xFE;
+  15   1        //3. 开始计时
+  16   1        TR0 = 1;
+  17   1        TF0 = 0;
+  18   1        //4.打开定时器0中断
+  19   1        ET0 = 1;
+  20   1        //5.打开总中断EA
+  21   1        EA = 1;
+  22   1      }
+  23          void Delay2000ms()    //@11.0592MHz
+  24          {
+  25   1        unsigned char i, j, k;
+  26   1      
+  27   1      
+  28   1        i = 15;
+  29   1        j = 2;
+  30   1        k = 235;
+  31   1        do
+  32   1        {
+  33   2          do
+  34   2          {
+  35   3            while (--k);
+  36   3          } while (--j);
+  37   2        } while (--i);
+  38   1      }
+  39          
+  40          void Delay300ms()   //@11.0592MHz
+  41          {
+  42   1        unsigned char i, j, k;
+  43   1      
+  44   1      
+  45   1        i = 3;
+  46   1        j = 26;
+  47   1        k = 223;
+  48   1        do
+  49   1        {
+  50   2          do
+  51   2          {
+  52   3            while (--k);
+  53   3          } while (--j);
+  54   2        } while (--i);
+C51 COMPILER V9.54   MAIN                                                                  01/23/2024 20:17:59 PAGE 2   
+
+  55   1      }
+  56          
+  57          void main()
+  58          {
+  59   1        Delay300ms();//让硬件稳定一下
+  60   1        Time0Init();//初始化定时器
+  61   1        jd = 1;     //初始角度是0度，定时器溢出1次就是0.5ms，高电平
+  62   1        cnt = 0;
+  63   1        sg90_con = 1;//一开始从高电平开始
+  64   1        
+  65   1        //每隔两秒切换一次角度
+  66   1        while(1){
+  67   2          jd = 3;//90度 1.5ms高电平
+  68   2          cnt = 0;
+  69   2          Delay2000ms();
+  70   2          jd = 1; //0度
+  71   2          cnt = 0;
+  72   2          Delay2000ms();
+  73   2          
+  74   2        }
+  75   1      }
+  76          
+  77          void Time0Handler () interrupt 1//定时器0的中断查询的序号是1，见手册第6章
+  78          {
+  79   1      
+  80   1              cnt++;//统计爆表次数
+  81   1              //重新给初值
+  82   1              TL0=0x33;
+  83   1              TH0=0xFE;
+  84   1        
+  85   1              //控制PWM波
+  86   1              if(cnt < jd){ //
+  87   2                sg90_con = 1;
+  88   2              }else{
+  89   2                sg90_con = 0;
+  90   2              }
+  91   1              if(cnt == 40){//爆表40次，经过了20ms
+  92   2                cnt = 0;//当爆表40次表示0.5ms，重新让cnt从0开始计算下一次的0.5ms
+  93   2                sg90_con = 1;
+  94   2              }
+  95   1          }
+  96          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    158    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
